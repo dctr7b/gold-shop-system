@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نظام محل الذهب</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --panel-alt: #f3f6fb;
+        --text: #1d2433;
+        --muted: #64748b;
+        --gold-50: #fffaf0;
+        --gold-100: #fef3c7;
+        --gold-200: #f9d977;
+        --gold-300: #f0c968;
+        --gold-400: #d9a53c;
+        --gold-500: #b98221;
+        --gold-600: #8d6018;
+        --primary: #2d2d34;
+        --success: #1f9d61;
+        --success-bg: #eafaf2;
+        --danger: #d63a3a;
+        --danger-bg: #ffebeb;
+        --shadow: 0 18px 48px rgba(16, 24, 40, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        font-family: "Tahoma", "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #f7f6f4 0%, #eef2f8 100%);
+        color: var(--text);
+      }
+
+      a { color: inherit; text-decoration: none; }
+      button, input, select { font: inherit; }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(27, 30, 35, 0.9);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .topbar-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 72px;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+        font-weight: 800;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f9d977, #d9a53c);
+        color: #1f1f29;
+        font-weight: 900;
+        box-shadow: 0 8px 20px rgba(217, 165, 60, 0.35);
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .pill {
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .gold-btn {
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #f4d57d, #d39d3d);
+        color: #1f1f29;
+        padding: 12px 20px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(217, 165, 60, 0.28);
+      }
+
+      .main {
+        padding: 24px 0 40px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 28px;
+        align-items: center;
+        padding: 24px 0 18px;
+      }
+
+      .hero-copy h1 {
+        margin: 18px 0 14px;
+        font-size: clamp(2.2rem, 4vw, 5rem);
+        line-height: 1.1;
+        color: #111827;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(217, 165, 60, 0.14);
+        color: #8d6018;
+        border: 1px solid rgba(217, 165, 60, 0.3);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 800;
+        font-size: 13px;
+      }
+
+      .hero-copy p {
+        color: var(--muted);
+        font-size: 1.04rem;
+        line-height: 1.8;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 22px;
+      }
+
+      .ghost-btn {
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        background: rgba(255,255,255,0.7);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 12px 20px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 18px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255,255,255,0.6);
+        padding: 12px 14px;
+        color: #334155;
+        font-size: 14px;
+      }
+
+      .feature-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f5d26b, #d9a53c);
+        box-shadow: 0 0 0 5px rgba(217, 165, 60, 0.12);
+      }
+
+      .dashboard-card {
+        background: linear-gradient(180deg, #1a1f2b 0%, #111827 100%);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 30px;
+        padding: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .price-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+      }
+
+      .price-label {
+        color: #cbd5e1;
+        font-size: 14px;
+      }
+
+      .price-num {
+        color: #f6d57b;
+        font-weight: 900;
+        font-size: 2rem;
+      }
+
+      .price-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(15, 23, 42, 0.75);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 18px;
+        padding: 14px 16px;
+        color: #e2e8f0;
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .mini-stat {
+        background: rgba(15, 23, 42, 0.78);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 18px;
+        padding: 14px 12px;
+        text-align: center;
+      }
+
+      .mini-stat .label {
+        display: block;
+        font-size: 11px;
+        color: #a8b6ce;
+        margin-bottom: 8px;
+      }
+
+      .mini-stat .value {
+        font-weight: 900;
+        color: #fff;
+        font-size: 1.15rem;
+      }
+
+      .section {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+        margin-top: 26px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .panel-title {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .chart {
+        height: 220px;
+        display: flex;
+        align-items: end;
+        gap: 12px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        border-radius: 22px;
+        padding: 18px 18px 10px;
+        border: 1px solid rgba(15, 23, 42, 0.04);
+      }
+
+      .bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .bar {
+        width: 100%;
+        max-width: 48px;
+        border-radius: 16px 16px 0 0;
+        background: linear-gradient(180deg, #f5d57d 0%, #d5a13b 100%);
+        box-shadow: inset 0 -10px 18px rgba(255,255,255,0.12);
+      }
+
+      .bar-label {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .customer-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .customer-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--panel-alt);
+        border-radius: 18px;
+        padding: 12px 14px;
+      }
+
+      .customer-row strong { display: block; }
+      .customer-row small { color: var(--muted); }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .badge.success { background: var(--success-bg); color: var(--success); }
+      .badge.warning { background: #fff4d9; color: #ab6a00; }
+      .badge.danger { background: var(--danger-bg); color: var(--danger); }
+
+      .tables-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+        margin-top: 26px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th, td {
+        text-align: right;
+        padding: 12px 10px;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      thead th {
+        font-size: 12px;
+        color: var(--muted);
+        background: var(--panel-alt);
+      }
+
+      tbody td {
+        font-size: 14px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      .settings-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 24px;
+        margin-top: 26px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      label {
+        font-size: 14px;
+        color: #475569;
+        font-weight: 700;
+      }
+
+      input, select {
+        width: 100%;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        border-radius: 16px;
+        background: #f8fafc;
+        padding: 12px 14px;
+        color: var(--text);
+        outline: none;
+      }
+
+      input:focus, select:focus {
+        border-color: rgba(217, 165, 60, 0.6);
+        box-shadow: 0 0 0 4px rgba(217,165,60,0.08);
+      }
+
+      .validation-box {
+        display: grid;
+        gap: 12px;
+      }
+
+      .validation-item {
+        background: var(--panel-alt);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: 18px;
+        padding: 12px 14px;
+      }
+
+      .validation-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .validation-item p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .status-valid { background: var(--success-bg); color: var(--success); }
+      .status-invalid { background: var(--danger-bg); color: var(--danger); }
+
+      .hidden { display: none !important; }
+
+      @media (max-width: 980px) {
+        .hero, .section, .tables-grid, .settings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 0 12px;
+        }
+
+        .topbar-inner {
+          min-height: 60px;
+        }
+
+        .top-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .feature-list, .mini-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .pill, .gold-btn, .ghost-btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <div class="brand-mark">ذ</div>
+          <span>محل الذهب</span>
+        </div>
+
+        <div class="top-actions">
+          <span class="pill">أسعار الذهب اليوم: 6,870 ج</span>
+          <button class="gold-btn" type="button">الدخول إلى لوحة التحكم</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main container">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">نظام متكامل لإدارة الذهب</span>
+          <h1>إدارة كاملة لمحل الذهب من الحجز إلى الفاتورة</h1>
+          <p>
+            تطبيق عربي كامل لإدارة المخزون، المبيعات، المشتريات، العملاء، الموردين، الأسعار، والتقارير المالية مع دعم كامل لأجهزة الكمبيوتر واللابتوب والتابلت والموبايل.
+          </p>
+
+          <div class="hero-actions">
+            <button class="gold-btn" type="button">ابدأ الآن</button>
+            <button class="ghost-btn" type="button">تسجيل الدخول</button>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature-item"><span class="feature-dot"></span> أسعاره السوق الحالية</div>
+            <div class="feature-item"><span class="feature-dot"></span> مخزون مرن حسب العيار</div>
+            <div class="feature-item"><span class="feature-dot"></span> فواتير ومبيعات</div>
+            <div class="feature-item"><span class="feature-dot"></span> دعم كامل للأجهزة</div>
+          </div>
+        </div>
+
+        <aside class="dashboard-card" aria-label="أسعار الذهب الآن">
+          <div class="price-box">
+            <div>
+              <div class="price-label">أسعار الذهب الآن</div>
+              <div class="price-num">24K</div>
+            </div>
+            <div style="font-size: 28px; color: #f6d57b;">◌</div>
+          </div>
+
+          <div class="price-list">
+            <div class="price-row"><span>عيار 18</span><strong data-gold="18">5,150 ج</strong></div>
+            <div class="price-row"><span>عيار 21</span><strong data-gold="21">6,020 ج</strong></div>
+            <div class="price-row"><span>عيار 24</span><strong data-gold="24">6,870 ج</strong></div>
+          </div>
+
+          <div class="mini-grid">
+            <div class="mini-stat"><span class="label">مبيعات</span><span class="value">120</span></div>
+            <div class="mini-stat"><span class="label">مخزون</span><span class="value">340</span></div>
+            <div class="mini-stat"><span class="label">إيراد</span><span class="value">95K</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">أداء المبيعات</h2>
+            <button class="ghost-btn" type="button">تقرير هذا الشهر</button>
+          </div>
+
+          <div class="chart" aria-label="مخطط المبيعات">
+            <div class="bar-col"><div class="bar" style="height: 35%"></div><span class="bar-label">ينا</span></div>
+            <div class="bar-col"><div class="bar" style="height: 52%"></div><span class="bar-label">فبر</span></div>
+            <div class="bar-col"><div class="bar" style="height: 63%"></div><span class="bar-label">مارس</span></div>
+            <div class="bar-col"><div class="bar" style="height: 49%"></div><span class="bar-label">أبر</span></div>
+            <div class="bar-col"><div class="bar" style="height: 79%"></div><span class="bar-label">مايو</span></div>
+            <div class="bar-col"><div class="bar" style="height: 72%"></div><span class="bar-label">يون</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">أعلى العملاء</h2>
+          </div>
+
+          <div class="customer-list">
+            <div class="customer-row">
+              <div><strong>أحمد محمد</strong><small>14 عملية</small></div>
+              <span class="badge success">52,500 ج</span>
+            </div>
+            <div class="customer-row">
+              <div><strong>سارة علي</strong><small>9 عمليات</small></div>
+              <span class="badge success">31,800 ج</span>
+            </div>
+            <div class="customer-row">
+              <div><strong>كريم ياسر</strong><small>21 عملية</small></div>
+              <span class="badge success">76,400 ج</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tables-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">أحدث المبيعات</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>العميل</th>
+                  <th>المنتج</th>
+                  <th>الوزن</th>
+                  <th>المبلغ</th>
+                </tr>
+              </thead>
+              <tbody id="salesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">مخزون الذهب</h2>
+          </div>
+          <div class="customer-list" id="inventoryList"></div>
+        </div>
+      </section>
+
+      <section class="settings-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">إعدادات النظام</h2>
+          </div>
+
+          <div class="field">
+            <label for="shopName">اسم المتجر</label>
+            <input id="shopName" value="مجوهرات الذهب الفضي" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="currency">عملة التعامل</label>
+            <input id="currency" value="جنيه مصري" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="profitRate">نسبة المبيعات</label>
+            <input id="profitRate" value="10%" type="text" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">التحقق الأمني</h2>
+          </div>
+
+          <div class="validation-box">
+            <div class="validation-item">
+              <div class="validation-item-row">
+                <strong>الرقم القومي</strong>
+                <span class="badge status-valid" id="nationalIdStatus">صالح</span>
+              </div>
+              <p>القيمة: 29801011234567</p>
+            </div>
+
+            <div class="validation-item">
+              <div class="validation-item-row">
+                <strong>رقم الهاتف</strong>
+                <span class="badge status-valid" id="phoneStatus">صالح</span>
+              </div>
+              <p>القيمة: 01012345678</p>
+            </div>
+
+            <div class="validation-item">
+              <div class="validation-item-row">
+                <strong>كود المحافظة</strong>
+                <span class="badge status-valid" id="governorateStatus">صالح</span>
+              </div>
+              <p>القيمة: 11</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const sales = [
+        { customer: 'أحمد محمد', product: 'خاتم 18K', weight: '7.2 غ', amount: '3,540 ج' },
+        { customer: 'سارة علي', product: 'سلسلة 21K', weight: '11.8 غ', amount: '4,890 ج' },
+        { customer: 'كريم ياسر', product: 'سبحة 24K', weight: '20.0 غ', amount: '6,500 ج' },
+        { customer: 'منى عبد الله', product: 'إسورة 18K', weight: '5.1 غ', amount: '2,200 ج' }
+      ];
+
+      const inventory = [
+        { name: 'خاتم 18K', metal: 'ذهب', stock: 18, status: 'متوفر' },
+        { name: 'سلسلة 21K', metal: 'ذهب', stock: 9, status: 'قليل' },
+        { name: 'سبحة 24K', metal: 'ذهب', stock: 5, status: 'متوفر' }
+      ];
+
+      function populateSales() {
+        const tbody = document.getElementById('salesTableBody');
+        tbody.innerHTML = sales.map(item => `
+          <tr>
+            <td>${item.customer}</td>
+            <td>${item.product}</td>
+            <td>${item.weight}</td>
+            <td style="color:#8d6018;font-weight:800;">${item.amount}</td>
+          </tr>
+        `).join('');
+      }
+
+      function populateInventory() {
+        const list = document.getElementById('inventoryList');
+        list.innerHTML = inventory.map(item => `
+          <div class="customer-row">
+            <div>
+              <strong>${item.name}</strong>
+              <small>${item.metal} · ${item.stock} قطعة</small>
+            </div>
+            <span class="badge ${item.status === 'متوفر' ? 'success' : 'warning'}">${item.status}</span>
+          </div>
+        `).join('');
+      }
+
+      function validateNationalId(value) {
+        const digits = value.replace(/\D/g, '');
+        if (!/^\d{14}$/.test(digits)) {
+          return { valid: false, message: 'الرقم القومي يجب أن يتكون من 14 رقمًا فقط.' };
+        }
+
+        const governorateCode = Number(digits.slice(0, 2));
+        const validGovernorates = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32]);
+        if (!validGovernorates.has(governorateCode)) {
+          return { valid: false, message: 'كود المحافظة غير صالح.' };
+        }
+
+        const month = Number(digits.slice(3, 5));
+        const day = Number(digits.slice(5, 7));
+
+        if (month < 1 || month > 12) return { valid: false, message: 'شهر الميلاد غير صالح.' };
+        if (day < 1 || day > 31) return { valid: false, message: 'يوم الميلاد غير صالح.' };
+
+        return { valid: true, message: 'صالح' };
+      }
+
+      function validateEgyptianPhone(value) {
+        const digits = value.replace(/\D/g, '');
+        if (!/^01[0125]\d{8}$/.test(digits)) {
+          return { valid: false, message: 'رقم الهاتف المصري يجب أن يكون 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.' };
+        }
+        return { valid: true, message: 'صالح' };
+      }
+
+      function validateGovernorateCode(value) {
+        const digits = value.replace(/\D/g, '');
+        const validCodes = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','29','30','31','32'];
+        if (!validCodes.includes(digits)) {
+          return { valid: false, message: 'كود المحافظة غير موجود في قائمة محافظات مصر.' };
+        }
+        return { valid: true, message: 'صالح' };
+      }
+
+      function setBadge(elementId, valid, label) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        el.textContent = label;
+        el.classList.toggle('status-valid', valid);
+        el.classList.toggle('status-invalid', !valid);
+      }
+
+      function runValidationChecks() {
+        const national = validateNationalId('29801011234567');
+        setBadge('nationalIdStatus', national.valid, national.valid ? 'صالح' : 'غير صالح');
+
+        const phone = validateEgyptianPhone('01012345678');
+        setBadge('phoneStatus', phone.valid, phone.valid ? 'صالح' : 'غير صالح');
+
+        const governorate = validateGovernorateCode('11');
+        setBadge('governorateStatus', governorate.valid, governorate.valid ? 'صالح' : 'غير صالح');
+      }
+
+      populateSales();
+      populateInventory();
+      runValidationChecks();
+    </script>
+  </body>
+</html>
